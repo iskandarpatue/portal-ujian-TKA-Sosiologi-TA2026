@@ -29,7 +29,7 @@
       padding: 0;
     }
 
-    /* Kunci seleksi teks di dashboard/modal */
+    /* Kunci seleksi teks di dashboard/modal agar tidak terganggu saat klik */
     .overlay, header, .card-footer-signature, button {
       -webkit-user-select: none;
       user-select: none;
@@ -101,7 +101,7 @@
       z-index: 10;
     }
 
-    /* Badge Ikon Sosiologi (Interaksi Sosial & Komunitas) */
+    /* Badge Ikon Sosiologi */
     .sociology-badge {
       width: 74px;
       height: 74px;
@@ -204,7 +204,7 @@
 
     .rules-item:last-child { margin-bottom: 0; }
 
-    /* Tombol Utama */
+    /* Tombol */
     .btn-glow {
       width: 100%;
       padding: 14px;
@@ -398,22 +398,15 @@
   <div id="startScreen" class="overlay">
     <div class="card">
       
-      <!-- Ikon Sosiologi (Interaksi Sosial & Komunitas) -->
+      <!-- Ikon Sosiologi -->
       <div class="sociology-badge">
         <svg class="sociology-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Figur Tengah (Utama) -->
           <circle cx="32" cy="22" r="7" fill="#c2410c"/>
           <path d="M21 44C21 37.9249 25.9249 33 32 33C38.0751 33 43 37.9249 43 44V47H21V44Z" fill="#c2410c"/>
-          
-          <!-- Figur Kiri -->
           <circle cx="16" cy="26" r="5" fill="#ea580c" fill-opacity="0.8"/>
           <path d="M8 45C8 40.5817 11.5817 37 16 37C18.2568 37 20.3013 37.9355 21.7583 39.4442C21.2721 40.8523 21 42.3853 21 44V47H8V45Z" fill="#ea580c" fill-opacity="0.8"/>
-          
-          <!-- Figur Kanan -->
           <circle cx="48" cy="26" r="5" fill="#ea580c" fill-opacity="0.8"/>
           <path d="M56 45C56 40.5817 52.4183 37 48 37C45.7432 37 43.6987 37.9355 42.2417 39.4442C42.7279 40.8523 43 42.3853 43 44V47H56V45Z" fill="#ea580c" fill-opacity="0.8"/>
-          
-          <!-- Garis Relasi / Interaksi Sosial -->
           <path d="M16 26L32 22L48 26" stroke="#fed7aa" stroke-width="1.5" stroke-dasharray="2 2"/>
         </svg>
       </div>
@@ -429,7 +422,7 @@
         </div>
         <div class="info-box">
           <span class="label">DURASI WAKTU</span>
-          <span class="value">⏱️ 60 Menit</span>
+          <span class="value">⏱️ 75 Menit</span>
         </div>
         <div class="info-box">
           <span class="label">SISTEM UJIAN</span>
@@ -521,23 +514,25 @@
         <span class="violation-badge" id="violationText">Pelanggaran: 0/3</span>
       </div>
     </div>
-    <div class="timer-badge" id="timer">60:00</div>
+    <!-- Tampilan Timer Header 75 Menit -->
+    <div class="timer-badge" id="timer">75:00</div>
   </header>
 
   <!-- Area Google Form Resmi Sosiologi -->
   <div class="form-container" id="frameContainer">
-    <!-- Iframe dimuat secara dinamis via JavaScript jika perangkat belum terkunci -->
+    <!-- Iframe dimuat dinamis via JavaScript -->
   </div>
 
   <script>
     // === KONFIGURASI SISTEM UJIAN ===
-    const EXAM_ID = "TKA_SOSIOLOGI_2026"; // ID unik ujian Sosiologi
+    const EXAM_ID = "TKA_SOSIOLOGI_2026"; 
     const PROCTOR_TOKEN = "TKASOSIOLOGI2026";
     
-    // GANTI TAUTAN DI BAWAH INI DENGAN TAUTAN GOOGLE FORM SOSIOLOGI ANDA:
-    const FORM_URL = "https://docs.google.com/forms/d/e/PASTE_LINK_GOOGLE_FORM_SOSIOLOGI_DISINI/viewform?embedded=true";
+    // TAUTAN RESMI SOSIOLOGI DENGAN PARAMETER EMBEDDED:
+    const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfGJRO3XjILBxrwr3uJw7ND8b6Xtic6phRIipBjC0lkGFj_ZQ/viewform?embedded=true";
     
-    let examDurationMinutes = 60;
+    // Durasi Waktu Diubah Menjadi 75 Menit:
+    let examDurationMinutes = 75;
     const maxViolations = 3;
 
     let timeRemaining = examDurationMinutes * 60;
@@ -570,7 +565,6 @@
       return false;
     }
 
-    // Jalankan pemeriksaan awal sebelum halaman dirender
     if (!checkDeviceLock()) {
       frameContainer.innerHTML = `
         <iframe 
@@ -592,14 +586,12 @@
       isExamActive = false;
       clearInterval(timerInterval);
 
-      // Simpan status kunci permanen di memori HP murid
       localStorage.setItem("CBT_LOCK_" + EXAM_ID, JSON.stringify({
         locked: true,
         reason: reason,
         timestamp: new Date().toISOString()
       }));
 
-      // Bersihkan formulir dari layar
       frameContainer.innerHTML = "";
       showPermanentLockScreen(reason);
     }
@@ -628,7 +620,6 @@
       const err = document.getElementById('resetError');
       
       if (input === PROCTOR_TOKEN) {
-        // Hapus status kunci dari storage HP murid
         localStorage.removeItem("CBT_LOCK_" + EXAM_ID);
         alert("Kunci perangkat berhasil dibuka oleh pengawas. Halaman akan dimuat ulang.");
         location.reload();
